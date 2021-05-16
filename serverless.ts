@@ -6,8 +6,8 @@ const serverlessConfiguration: AWS = {
   custom: {
     region: '${opt:region, self:provider.region}',
     stage: '${opt:stage, self:provider.stage}',
-    list_table: '${self:service}-list-table-${opt:stage, self:provider.stage}',
-    tasks_table: '${self:service}-tasks-table-${opt:stage, self:provider.stage}',
+    offers_table: '${self:service}-offers-table-${opt:stage, self:provider.stage}',
+    adstable: '${self:service}-ads-table-${opt:stage, self:provider.stage}',
     table_throughputs: {
       prod: 5,
       default: 1,
@@ -51,8 +51,30 @@ const serverlessConfiguration: AWS = {
       shouldStartNameWithService: true,
       minimumCompressionSize: 1024,
     },
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: [
+            'dynamodb:DescribeTable',
+            'dynamodb:Query',
+            'dynamodb:Scan',
+            'dynamodb:GetItem',
+            'dynamodb:PutItem',
+            'dynamodb:UpdateItem',
+            'dynamodb:DeleteItem'
+        ],
+        Resource: [
+          {"Fn::GetAtt": [ 'OffersTable', 'Arn' ]},
+          {"Fn::GetAtt": [ 'AdsTable', 'Arn' ]}
+        ]
+      }
+    ],
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      REGION: '${self:custom.region}',
+      STAGE: '${self:custom.stage}',
+      OFFERS_TABLE: '${self:custom.offers_table}',
+      ADS_TABLE: '${self:custom.ads_table}',
     },
   },
   functions: {
@@ -68,7 +90,36 @@ const serverlessConfiguration: AWS = {
       ]
     }
   },
-  
+  resources: {
+    Resources: {
+      OffersTable: {
+          Type: 'AWS::DynamoDB::Table',
+          DeletionPolicy: 'Retain',
+          Properties: {
+            TableName: '${self:provider.environment.OFFERS_TABLE}',
+            AttributeDefinitions: [
+              { AttributeName: 'id', AttributeType: 'S' }
+            ],
+            KeySchema: [
+              { AttributeName: 'id', KeyType: 'HASH' }
+            ]
+         }
+      },
+      AdsTable: {
+        Type: 'AWS::DynamoDB::Table',
+        DeletionPolicy: 'Retain',
+        Properties: {
+          TableName: '${self:provider.environment.ADS_TABLE}',
+            AttributeDefinitions: [
+              { AttributeName: 'id', AttributeType: 'S' },
+            ],
+            KeySchema: [
+              { AttributeName: 'id', KeyType: 'HASH' },
+            ],
+        }
+     }
+    }
+  }
 }
 
 module.exports = serverlessConfiguration;
