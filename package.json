@@ -12,7 +12,14 @@
   "dependencies": {
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
-    "source-map-support": "^0.5.19"
+    "@types/uuid": "^8.3.0",
+    "aws-sdk": "^2.907.0",
+    "serverless-bundle": "^4.3.1",
+    "serverless-dotenv-plugin": "^3.9.0",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^7.0.0",
+    "source-map-support": "^0.5.19",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@serverless/typescript": "^2.23.0",
