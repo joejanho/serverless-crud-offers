@@ -1,4 +1,7 @@
 import type { AWS } from '@serverless/typescript';
+// DynamoDB
+import dynamoDbTables from 'resources/dynamodb-tables';
+import functions from './resources/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'serverlerss-offers',
@@ -6,8 +9,9 @@ const serverlessConfiguration: AWS = {
   custom: {
     region: '${opt:region, self:provider.region}',
     stage: '${opt:stage, self:provider.stage}',
+    prefix: '${self:service}-${self:custom.stage}',
     offers_table: '${self:service}-offers-table-${opt:stage, self:provider.stage}',
-    adstable: '${self:service}-ads-table-${opt:stage, self:provider.stage}',
+    ads_table: '${self:service}-ads-table-${opt:stage, self:provider.stage}',
     table_throughputs: {
       prod: 5,
       default: 1,
@@ -36,6 +40,7 @@ const serverlessConfiguration: AWS = {
   },
   plugins: [
       'serverless-bundle',
+      'serverless-dynamodb-local',
       'serverless-offline',
       'serverless-dotenv-plugin',
   ],
@@ -77,48 +82,9 @@ const serverlessConfiguration: AWS = {
       ADS_TABLE: '${self:custom.ads_table}',
     },
   },
-  functions: {
-    hello: {
-      handler: 'handler.hello',
-      events: [
-        {
-          http: {
-            method: 'get',
-            path: 'hello',
-          }
-        }
-      ]
-    }
-  },
+  functions,
   resources: {
-    Resources: {
-      OffersTable: {
-          Type: 'AWS::DynamoDB::Table',
-          DeletionPolicy: 'Retain',
-          Properties: {
-            TableName: '${self:provider.environment.OFFERS_TABLE}',
-            AttributeDefinitions: [
-              { AttributeName: 'id', AttributeType: 'S' }
-            ],
-            KeySchema: [
-              { AttributeName: 'id', KeyType: 'HASH' }
-            ]
-         }
-      },
-      AdsTable: {
-        Type: 'AWS::DynamoDB::Table',
-        DeletionPolicy: 'Retain',
-        Properties: {
-          TableName: '${self:provider.environment.ADS_TABLE}',
-            AttributeDefinitions: [
-              { AttributeName: 'id', AttributeType: 'S' },
-            ],
-            KeySchema: [
-              { AttributeName: 'id', KeyType: 'HASH' },
-            ],
-        }
-     }
-    }
+    Resources: dynamoDbTables,
   }
 }
 
