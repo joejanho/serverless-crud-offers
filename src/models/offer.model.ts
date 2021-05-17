@@ -10,7 +10,7 @@ interface IProps {
     offerValue: number;
     activationDate: Date,
     endDate: Date,
-    articleTpes: [ArticleType]
+    articleTypes: [ArticleType]
 }
 
 export interface OfferInterface extends IProps {
@@ -28,7 +28,7 @@ export default class OfferModel {
     private activationDate: Date;
     private endDate: Date;
     @ArrayNotEmpty()
-    private articleTpes: [ArticleType];
+    private articleTypes: [ArticleType];
 
     constructor({ 
         id = UUID(),
@@ -37,7 +37,7 @@ export default class OfferModel {
         offerValue = null,
         activationDate = null,
         endDate = null,
-        articleTpes = null
+        articleTypes = null
         }: IProps) {
         this.id = id;
         this.title = title;
@@ -45,7 +45,7 @@ export default class OfferModel {
         this.offerValue = offerValue;
         this.activationDate = activationDate;
         this.endDate = endDate;
-        this.articleTpes = articleTpes;
+        this.articleTypes = articleTypes;
     }
 
     /**
@@ -152,7 +152,7 @@ export default class OfferModel {
      * @param value
     */
     setArticleTypes(value:[ArticleType]) {
-        this.articleTpes = value;
+        this.articleTypes = value;
     }
 
     /**
@@ -160,7 +160,7 @@ export default class OfferModel {
      * @return {[ArticleType]|*}
     */
     getArticleTypes() {
-        return this.articleTpes;
+        return this.articleTypes;
     }   
 
     /**
@@ -175,7 +175,7 @@ export default class OfferModel {
             offerValue: this.getOfferValue(),
             activationDate: this.getActivationDate(),
             endDate: this.getEndDate(),
-            articleTpes: this.getArticleTypes(),
+            articleTypes: this.getArticleTypes(),
             timestamp: new Date().getTime(),
         };
     }
