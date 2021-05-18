@@ -41,7 +41,7 @@ export const createOffer: APIGatewayProxyHandler = async (event: APIGatewayEvent
                     endDate: data.endDate,
                     createdAt: data.timestamp,
                     updatedAt: data.timestamp,
-                    articleTpes: data.articleTpes,
+                    articleTypes: data.articleTypes,
                 }
             }
             // Inserts item into DynamoDB table

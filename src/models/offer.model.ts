@@ -37,7 +37,7 @@ export default class OfferModel {
         offerValue = null,
         activationDate = null,
         endDate = null,
-        articleTypes = null
+        articleTypes = [] as any
         }: IProps) {
         this.id = id;
         this.title = title;
