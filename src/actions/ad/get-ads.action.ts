@@ -27,7 +27,8 @@ export const getAds: APIGatewayProxyHandler = async (_event: APIGatewayEvent, _c
     const { ADS_TABLE } = process.env;
 
     // Validate against constraints
-    const items = await (await databaseService.getItems(ADS_TABLE)).Items as any;
-    response = new ResponseModel(items, StatusCode.OK, ResponseMessage.GET_LIST_SUCCESS);
-    return response.generate()
+    await (databaseService.getItems(ADS_TABLE)).then((items) => {
+            response = new ResponseModel(items, StatusCode.OK, ResponseMessage.GET_LIST_SUCCESS);
+            return response.generate()
+    });
 }

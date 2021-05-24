@@ -17,15 +17,15 @@ interface AdInterface extends IProps {
 
 export default class AdModel {
 
-    private id: string;
+    public id: string;
     @IsNotEmpty()
-    private title: string;
+    public title: string;
     @IsNotEmpty()
-    private link: string;
+    public link: string;
     @IsNotEmpty()
-    private asset: string;
+    public asset: string;
     @ArrayNotEmpty()
-    private offers: [OfferInterface];
+    public offers: [OfferInterface];
 
     constructor({ 
         id = UUID(), 
